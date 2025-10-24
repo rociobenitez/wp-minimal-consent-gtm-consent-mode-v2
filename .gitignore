@@ -1,0 +1,22 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.code-workspace
+
+# Builds/artefactos
+dist/
+build/
+coverage/
+*.log
+
+# PHP/Composer
+vendor/
+composer.lock
+
+# Node
+node_modules/
+package-lock.json
