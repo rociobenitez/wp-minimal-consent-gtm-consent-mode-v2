@@ -1,14 +1,16 @@
-#wpmc-banner button{border:0;padding:8px 12px;cursor:pointer;border-radius:6px}
-#wpmc-accept{background:#fff;color:#111}
+.wpmc-banner button{border:0;padding:8px 16px;line-height:24px;cursor:pointer;border-radius:0;white-space: nowrap;overflow-wrap: break-word;}
+#wpmc-accept{background:#fff;color:#212121}
 #wpmc-reject{background:#333;color:#fff}
-#wpmc-manage{background:transparent;color:#bbb;text-decoration:underline}
+#wpmc-manage{background:transparent;color:#bbb;border:1px solid #bbb}
 @media (max-width:640px){#wpmc-banner{flex-direction:column;align-items:stretch}}
-#wpmc-banner[hidden]{display:none!important}
+.wpmc-banner[hidden]{display:none!important}
+.wpmc-banner .wpmc-title{font-size:17px; margin:0 0 6px; color:#fff;}
+.wpmc-banner .wpmc-desc{font-size:13px; margin:8px 0 0;color:#f8f8f8}
 
 /* Botón flotante de preferencias */
 #wpmc-preferences-btn{
     width:44px; height:44px; border-radius:999px; border:0; cursor:pointer;
-    background:#111; color:#fff; z-index:2147483647;
+    background:#212121; color:#fff; z-index:2147483647;
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 4px 12px rgba(0,0,0,.25);
 }
@@ -22,19 +24,23 @@
 
 /* Modal de preferencias */
 #wpmc-modal[hidden]{display:none!important}
-#wpmc-modal{position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:2147483648; display:flex; align-items:center; justify-content:center; padding:16px}
-.wpmc-box{background:#fff; color:#111; border-radius:10px; max-width:560px; width:100%; padding:18px}
-.wpmc-title{font-size:18px; margin:0 0 6px}
-.wpmc-desc{font-size:13px; color:#444; margin:0 0 12px}
-.wpmc-row{display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-top:1px solid #eee}
+.wpmc-modal{position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:999999999; display:flex; align-items:center; justify-content:center; padding:16px}
+.wpmc-modal .wpmc-box{background:#fff; color:#212121; border-radius:6px; max-width:560px; width:100%; padding:18px;box-shadow: 0 32px 68px rgb(0 0 0 / .3)}
+.wpmc-modal .wpmc-title{font-size:18px; margin:0 0 6px; color:#212121;}
+.wpmc-modal .wpmc-desc{font-size:13px; margin:8px 0 0;color:#333}
+.wpmc-row{display:flex; gap:16px; align-items:center; justify-content:space-between; padding:10px 0; border-top:1px solid #eee}
 .wpmc-row:first-of-type{border-top:none}
 .wpmc-actions{display:flex; gap:8px; justify-content:flex-end; margin-top:12px}
-.wpmc-btn{border:0; padding:8px 12px; border-radius:6px; cursor:pointer}
-.wpmc-btn--primary{background:#111; color:#fff}
-.wpmc-btn--ghost{background:#f2f2f2; color:#111}
+.wpmc-btn{border:0; padding:8px 16px; border-radius:0; cursor:pointer;line-height: 24px;}
+.wpmc-btn--primary{background:#212121; color:#fff}
+.wpmc-btn--ghost{background:#f2f2f2; color:#212121}
 .wpmc-switch{position:relative; width:42px; height:24px; background:#ddd; border-radius:999px; transition:background .15s}
 .wpmc-switch input{position:absolute; inset:0; opacity:0; cursor:pointer}
+input[type="checkbox"]{-webkit-appearance:none; -moz-appearance:none; appearance:none;position: relative; width: 44px; height: 24px; margin: 0; background: #d0d5d2; border-radius: 50px; cursor: pointer; outline: 0; border: none; top: 0;}
+input[type="checkbox"]:checked{background: #4caf50;}
+input[type="checkbox"]:before{    position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px; border-radius: 50%; background-color: #fff; -webkit-transition: 0.4s; transition: 0.4s; margin: 0;}
+input[type="checkbox"]:checked:before{transform: translateX(20px);}
 .wpmc-switch::after{content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:999px; background:#fff; transition:left .15s}
 .wpmc-switch input:checked + .wpmc-switch::after{left:21px}
-.wpmc-switch input:checked + .wpmc-switch{background:#111}
-.wpmc-label{font-size:14px; margin-right:12px}
+.wpmc-switch input:checked + .wpmc-switch{background:#212121}
+.wpmc-label{font-size:14px; margin-right:12px; font-weight:600; color:#212121}

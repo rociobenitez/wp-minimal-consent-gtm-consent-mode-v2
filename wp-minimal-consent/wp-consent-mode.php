@@ -9,7 +9,7 @@
 if (!defined('ABSPATH')) exit;
 
 /** =========================
- *  CONFIGURACIÓN (MVP)
+ *  CONFIGURACIÓN
  *  Edita únicamente esta sección
  *  ========================= */
 define('WPMC_GTM_ID', 'GTM-K6BJZF9R');          // ID de contenedor de Google Tag Manager
@@ -22,22 +22,25 @@ define('WPMC_FLOATING_CORNER', 'bottom-left');  // 'bottom-right' | 'bottom-left
 define('WPMC_DEBUG', true);                     // Activar logs en consola para depuración
 
 // Textos del banner (mínimos y claros)
-define('WPMC_TXT_MSG',    'Usamos cookies para analizar el uso y, si aceptas, personalizar publicidad.');
+define('WPMC_TXT_TITLE', 'Valoramos tu privacidad');
+define('WPMC_TXT_MSG', 'Usamos cookies para mejorar su experiencia de navegación,  mostrarle anuncios o contenidos personalizados y analizar nuestro tráfico. Al hacer clic en “Aceptar todo” usted da su consentimiento a nuestro uso de las cookies.');
 define('WPMC_TXT_ACCEPT', 'Aceptar todo');
 define('WPMC_TXT_REJECT', 'Rechazar');
 define('WPMC_TXT_MANAGE', 'Gestionar');
-define('WPMC_TXT_PREFS',  'Preferencias de cookies');
+define('WPMC_TXT_PREFS', 'Preferencias de cookies');
 
 // Textos del panel de preferencias
-define('WPMC_TXT_PANEL_TITLE',  'Preferencias de cookies');
-define('WPMC_TXT_PANEL_DESC',   'Activa o desactiva categorías. Siempre usamos cookies necesarias.');
-define('WPMC_TXT_CAT_ANALYTICS','Analítica');
-define('WPMC_TXT_CAT_MARKETING','Publicidad');
-define('WPMC_TXT_SAVE',         'Guardar selección');
-define('WPMC_TXT_CLOSE',        'Cerrar');
+define('WPMC_TXT_PANEL_TITLE', 'Preferencias de cookies');
+define('WPMC_TXT_PANEL_DESC', 'Activa o desactiva categorías. Siempre usamos cookies necesarias.');
+define('WPMC_TXT_CAT_ANALYTICS', 'Analítica');
+define('WPMC_TXT_CAT_ANALYTICS_DESC', 'Las cookies analíticas se utilizan para comprender cómo interactúan los visitantes con el sitio web. Estas cookies ayudan a proporcionar información sobre métricas el número de visitantes, el porcentaje de rebote, la fuente de tráfico, etc.');
+define('WPMC_TXT_CAT_MARKETING', 'Publicidad');
+define('WPMC_TXT_CAT_MARKETING_DESC', 'Las cookies de publicidad se utilizan para mostrar anuncios personalizados y compartir datos con terceros (Google Ads, Facebook Ads...)');
+define('WPMC_TXT_SAVE', 'Guardar selección');
+define('WPMC_TXT_CLOSE', 'Cerrar');
 
 /** =========================
- *  AVISOS EN ADMIN (config crítica)
+ *  AVISOS EN ADMIN
  *  ========================= */
 add_action('admin_notices', function () {
   if (!current_user_can('manage_options')) return;
@@ -153,9 +156,14 @@ add_action('wp_footer', function () {
   </style>
 
   <!-- Consent Banner -->
-  <div id="wpmc-banner" role="dialog" aria-live="polite" aria-label="Preferencias de cookies">
-    <div><?php echo esc_html(WPMC_TXT_MSG); ?></div>
+  <div id="wpmc-banner" class="wpmc-banner" role="dialog" aria-live="polite" aria-label="Preferencias de cookies">
     <div>
+      <?php if (WPMC_TXT_TITLE): ?>
+        <h2 class="wpmc-title"><?php echo esc_html(WPMC_TXT_TITLE); ?></h2>
+      <?php endif; ?>
+      <div class="wpmc-desc"><?php echo esc_html(WPMC_TXT_MSG); ?></div>
+    </div>
+    <div class="wpmc-actions">
       <button id="wpmc-accept"><?php echo esc_html(WPMC_TXT_ACCEPT); ?></button>
       <button id="wpmc-reject"><?php echo esc_html(WPMC_TXT_REJECT); ?></button>
       <?php if (WPMC_BANNER_SHOW_MANAGE): ?>
@@ -172,13 +180,18 @@ add_action('wp_footer', function () {
   <?php endif; ?>
 
   <!-- Modal de preferencias -->
-  <div id="wpmc-modal" role="dialog" aria-modal="true" aria-labelledby="wpmc-modal-title" hidden>
+  <div id="wpmc-modal" class="wpmc-modal" role="dialog" aria-modal="true" aria-labelledby="wpmc-modal-title" hidden>
     <div class="wpmc-box">
-      <h2 id="wpmc-modal-title" class="wpmc-title"><?php echo esc_html(WPMC_TXT_PANEL_TITLE); ?></h2>
+      <?php if (WPMC_TXT_PANEL_TITLE): ?>
+        <h2 id="wpmc-modal-title" class="wpmc-title"><?php echo esc_html(WPMC_TXT_PANEL_TITLE); ?></h2>
+      <?php endif; ?>
       <p class="wpmc-desc"><?php echo esc_html(WPMC_TXT_PANEL_DESC); ?></p>
 
       <div class="wpmc-row">
-        <span class="wpmc-label"><?php echo esc_html(WPMC_TXT_CAT_ANALYTICS); ?></span>
+        <div>
+          <div class="wpmc-label"><?php echo esc_html(WPMC_TXT_CAT_ANALYTICS); ?></div>
+          <div class="wpmc-desc"><?php echo esc_html(WPMC_TXT_CAT_ANALYTICS_DESC); ?></div>
+        </div>
         <label>
           <input id="wpmc-opt-analytics" type="checkbox" aria-label="<?php echo esc_attr(WPMC_TXT_CAT_ANALYTICS); ?>">
           <span class="wpmc-switch"></span>
@@ -186,7 +199,10 @@ add_action('wp_footer', function () {
       </div>
 
       <div class="wpmc-row">
-        <span class="wpmc-label"><?php echo esc_html(WPMC_TXT_CAT_MARKETING); ?></span>
+        <div>
+          <div class="wpmc-label"><?php echo esc_html(WPMC_TXT_CAT_MARKETING); ?></div>
+          <div class="wpmc-desc"><?php echo esc_html(WPMC_TXT_CAT_MARKETING_DESC); ?></div>
+        </div>
         <label>
           <input id="wpmc-opt-marketing" type="checkbox" aria-label="<?php echo esc_attr(WPMC_TXT_CAT_MARKETING); ?>">
           <span class="wpmc-switch"></span>
