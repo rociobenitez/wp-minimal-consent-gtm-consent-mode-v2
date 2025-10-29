@@ -153,9 +153,7 @@ add_action('wp_footer', function () {
   $floatX = (WPMC_FLOATING_CORNER === 'bottom-left') ? 'left:16px;right:auto;' : 'right:16px;left:auto;';
   ?>
   <style>
-    #wpmc-banner{position:fixed;inset:<?php echo esc_attr($inset); ?>;display:flex;gap:.75rem;align-items:center;justify-content:space-between;
-      background:#111;color:#fff;padding:12px 16px;z-index:2147483646;font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto}
-    /* Botón flotante de preferencias */
+    #wpmc-banner{position:fixed;inset:<?php echo esc_attr($inset); ?>;z-index:9999;}
     #wpmc-preferences-btn{
       position:fixed; bottom:16px; <?php echo $floatX; ?>
     }
@@ -163,18 +161,20 @@ add_action('wp_footer', function () {
 
   <!-- Consent Banner -->
   <div id="wpmc-banner" class="wpmc-banner" role="dialog" aria-live="polite" aria-label="Preferencias de cookies">
-    <div>
-      <?php if (WPMC_TXT_TITLE): ?>
-        <h2 class="wpmc-title"><?php echo esc_html(WPMC_TXT_TITLE); ?></h2>
-      <?php endif; ?>
-      <div class="wpmc-desc"><?php echo esc_html(WPMC_TXT_MSG); ?></div>
-    </div>
-    <div class="wpmc-actions">
-      <button id="wpmc-accept"><?php echo esc_html(WPMC_TXT_ACCEPT); ?></button>
-      <button id="wpmc-reject"><?php echo esc_html(WPMC_TXT_REJECT); ?></button>
-      <?php if (WPMC_BANNER_SHOW_MANAGE): ?>
-        <button id="wpmc-manage" type="button"><?php echo esc_html(WPMC_TXT_MANAGE); ?></button>
-      <?php endif; ?>
+    <div class="wpmc-content"> 
+      <div>
+        <?php if (WPMC_TXT_TITLE): ?>
+          <h2 class="wpmc-title"><?php echo esc_html(WPMC_TXT_TITLE); ?></h2>
+        <?php endif; ?>
+        <div class="wpmc-desc"><?php echo esc_html(WPMC_TXT_MSG); ?></div>
+      </div>
+      <div class="wpmc-actions">
+        <button id="wpmc-accept"><?php echo esc_html(WPMC_TXT_ACCEPT); ?></button>
+        <button id="wpmc-reject"><?php echo esc_html(WPMC_TXT_REJECT); ?></button>
+        <?php if (WPMC_BANNER_SHOW_MANAGE): ?>
+          <button id="wpmc-manage" type="button"><?php echo esc_html(WPMC_TXT_MANAGE); ?></button>
+        <?php endif; ?>
+      </div> 
     </div>
   </div>
   <?php if (WPMC_FLOATING_ENABLED): ?>

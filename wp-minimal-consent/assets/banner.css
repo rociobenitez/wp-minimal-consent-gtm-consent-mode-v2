@@ -1,46 +1,265 @@
-.wpmc-banner button{border:0;padding:8px 16px;line-height:24px;cursor:pointer;border-radius:0;white-space: nowrap;overflow-wrap: break-word;}
-#wpmc-accept{background:#fff;color:#212121}
-#wpmc-reject{background:#333;color:#fff}
-#wpmc-manage{background:transparent;color:#bbb;border:1px solid #bbb}
-@media (max-width:640px){#wpmc-banner{flex-direction:column;align-items:stretch}}
-.wpmc-banner[hidden]{display:none!important}
-.wpmc-banner .wpmc-title{font-size:17px; margin:0 0 6px; color:#fff;}
-.wpmc-banner .wpmc-desc{font-size:13px; margin:8px 0 0;color:#f8f8f8}
+#wpmc-banner {
+  background: #111;
+  color: #fff;
+}
+#wpmc-banner .wpmc-content {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  font: 14px/1.35 system-ui, -apple-system, Segoe UI, Roboto;
+  max-width: 1320px;
+  margin-inline: auto;
+}
+.wpmc-banner button {
+  border: 0;
+  padding: 8px 16px;
+  line-height: 24px;
+  cursor: pointer;
+  border-radius: 0;
+  white-space: nowrap;
+  overflow-wrap: break-word;
+}
+#wpmc-accept {
+  background: #fff;
+  color: #212121;
+  :hover {
+    background: #f0f0f0;
+  }
+  :focus {
+    outline: 2px solid #212121;
+    outline-offset: 2px;
+  }
+}
+#wpmc-reject {
+  background: #333;
+  color: #fff;
+  :hover {
+    background: #000;
+  }
+  :focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+#wpmc-manage {
+  background: transparent;
+  color: #bbb;
+  border: 1px solid #bbb;
+  :hover {
+    color: #fff;
+    border-color: #fff;
+  }
+  :focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+@media (max-width: 640px) {
+  #wpmc-banner .wpmc-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.wpmc-banner[hidden] {
+  display: none !important;
+}
+.wpmc-banner .wpmc-title {
+  font-size: 17px;
+  margin: 0 0 6px;
+  color: #fff;
+}
+.wpmc-banner .wpmc-desc {
+  font-size: 13px;
+  margin: 8px 0 0;
+  color: #f8f8f8;
+}
 
 /* Botón flotante de preferencias */
-#wpmc-preferences-btn{
-    width:44px; height:44px; border-radius:999px; border:0; cursor:pointer;
-    background:#212121; color:#fff; z-index:2147483647;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 4px 12px rgba(0,0,0,.25);
+#wpmc-preferences-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  background: #212121;
+  color: #fff;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
-#wpmc-preferences-btn:hover{filter:brightness(1.1)}
-#wpmc-preferences-btn[hidden]{display:none!important}
-#wpmc-preferences-btn:focus{outline:2px solid #fff; outline-offset:2px}
-@media (prefers-reduced-motion:no-preference){
-    #wpmc-preferences-btn{transition:filter .15s ease}
+#wpmc-preferences-btn:hover {
+  filter: brightness(1.1);
 }
-#wpmc-preferences-btn svg{width:20px;height:20px;fill:currentColor}
+#wpmc-preferences-btn[hidden] {
+  display: none !important;
+}
+#wpmc-preferences-btn:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #wpmc-preferences-btn {
+    transition: filter 0.15s ease;
+  }
+}
+#wpmc-preferences-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
 
 /* Modal de preferencias */
-#wpmc-modal[hidden]{display:none!important}
-.wpmc-modal{position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:999999999; display:flex; align-items:center; justify-content:center; padding:16px}
-.wpmc-modal .wpmc-box{background:#fff; color:#212121; border-radius:6px; max-width:560px; width:100%; padding:18px;box-shadow: 0 32px 68px rgb(0 0 0 / .3)}
-.wpmc-modal .wpmc-title{font-size:18px; margin:0 0 6px; color:#212121;}
-.wpmc-modal .wpmc-desc{font-size:13px; margin:8px 0 0;color:#333}
-.wpmc-row{display:flex; gap:16px; align-items:center; justify-content:space-between; padding:10px 0; border-top:1px solid #eee}
-.wpmc-row:first-of-type{border-top:none}
-.wpmc-actions{display:flex; gap:8px; justify-content:flex-end; margin-top:12px}
-.wpmc-btn{border:0; padding:8px 16px; border-radius:0; cursor:pointer;line-height: 24px;}
-.wpmc-btn--primary{background:#212121; color:#fff}
-.wpmc-btn--ghost{background:#f2f2f2; color:#212121}
-.wpmc-switch{position:relative; width:42px; height:24px; background:#ddd; border-radius:999px; transition:background .15s}
-.wpmc-switch input{position:absolute; inset:0; opacity:0; cursor:pointer}
-input[type="checkbox"]{-webkit-appearance:none; -moz-appearance:none; appearance:none;position: relative; width: 44px; height: 24px; margin: 0; background: #d0d5d2; border-radius: 50px; cursor: pointer; outline: 0; border: none; top: 0;}
-input[type="checkbox"]:checked{background: #4caf50;}
-input[type="checkbox"]:before{    position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 2px; border-radius: 50%; background-color: #fff; -webkit-transition: 0.4s; transition: 0.4s; margin: 0;}
-input[type="checkbox"]:checked:before{transform: translateX(20px);}
-.wpmc-switch::after{content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:999px; background:#fff; transition:left .15s}
-.wpmc-switch input:checked + .wpmc-switch::after{left:21px}
-.wpmc-switch input:checked + .wpmc-switch{background:#212121}
-.wpmc-label{font-size:14px; margin-right:12px; font-weight:600; color:#212121}
+#wpmc-modal[hidden] {
+  display: none !important;
+}
+.wpmc-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.wpmc-modal .wpmc-box {
+  background: #fff;
+  color: #212121;
+  border-radius: 6px;
+  max-width: 560px;
+  width: 100%;
+  padding: 18px;
+  box-shadow: 0 32px 68px rgb(0 0 0 / 0.3);
+}
+.wpmc-modal .wpmc-title {
+  font-size: 18px;
+  margin: 0 0 6px;
+  color: #212121;
+}
+.wpmc-modal .wpmc-desc {
+  font-size: 13px;
+  margin: 8px 0 0;
+  color: #333;
+}
+.wpmc-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+}
+.wpmc-row:first-of-type {
+  border-top: none;
+}
+.wpmc-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.wpmc-btn {
+  border: 0;
+  padding: 8px 16px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 24px;
+}
+.wpmc-btn--primary {
+  background: #212121;
+  color: #fff;
+  :hover {
+    background: #000;
+  }
+  :focus {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+}
+.wpmc-btn--ghost {
+  background: #f2f2f2;
+  color: #212121;
+  :hover {
+    background: #e0e0e0;
+  }
+  :focus {
+    outline: 2px solid #212121;
+    outline-offset: 2px;
+  }
+}
+.wpmc-switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  background: #ddd;
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+.wpmc-switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 44px;
+  height: 24px;
+  margin: 0;
+  background: #d0d5d2;
+  border-radius: 50px;
+  cursor: pointer;
+  outline: 0;
+  border: none;
+  top: 0;
+}
+input[type="checkbox"]:checked {
+  background: #4caf50;
+}
+input[type="checkbox"]:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background-color: #fff;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  margin: 0;
+}
+input[type="checkbox"]:checked:before {
+  transform: translateX(20px);
+}
+.wpmc-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #fff;
+  transition: left 0.15s;
+}
+.wpmc-switch input:checked + .wpmc-switch::after {
+  left: 21px;
+}
+.wpmc-switch input:checked + .wpmc-switch {
+  background: #212121;
+}
+.wpmc-label {
+  font-size: 14px;
+  margin-right: 12px;
+  font-weight: 600;
+  color: #212121;
+}
