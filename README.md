@@ -1,44 +1,45 @@
 # WP Minimal Consent (GTM + Consent Mode v2)
 
-Minimal WordPress CMP plugin integrating **Google Consent Mode v2** with a lightweight **cookie banner**, **GTM compatibility** and **code-only configuration** (no admin UI). Advanced Mode defaults, regional denied, wait_for_update, and persistent preferences.
+Plugin mínimo de WordPress CMP que integra **Google Consent Mode v2** con un **banner de cookies**, **compatibilidad con GTM** y **configuración por código** (sin interfaz de administrador).
 
-## Features
+## Características
 
-- Consent Mode v2 (ad_storage, analytics_storage, ad_user_data, ad_personalization)
-- Advanced Mode defaults before GTM
-- Regional defaults (EEE/UK/CH)
-- Banner + granular panel (Analytics/Marketing)
-- Persistent preferences + floating “Preferences” button
-- Optional debug logs (`WPMC_DEBUG`)
+- Consent Mode v2 (`ad_storage`, `analytics_storage`, `ad_user_data`, `ad_personalization`)
+- Valores predeterminados en Modo Avanzado antes de GTM
+- Valores predeterminados regionales (EEE/UK/CH)
+- Banner + panel granular (Analytics/Marketing)
+- Preferencias persistentes + botón flotante "Preferencias"
+- Logs de depuración opcionales (`WPMC_DEBUG`)
 
-## Requirements
+## Requisitos
 
 - WordPress 5.9+ / PHP 7.4+
-- Google Tag Manager container (Web)
-- (Optional) GA4 test property
+- Contenedor de Google Tag Manager (Web)
+- (Opcional) Propiedad de prueba GA4
 
-## Install
+## Instalación
 
-1. Copy the folder `wp-minimal-consent` into `wp-content/plugins/`.
-2. Activate the plugin in **WP → Plugins**.
-3. Edit constants at the top of `wp-minimal-consent.php`:
-   - `WPMC_GTM_ID`: your GTM container ID
-   - texts, position, `WPMC_DEBUG`, etc.
+1. Copiar la carpeta `wp-minimal-consent` en `wp-content/plugins/`.
+2. Activar el plugin en **WP → Plugins**.
+3. Editar las constantes en la parte superior de `wp-minimal-consent.php`:
 
-## How it works
+- `WPMC_GTM_ID`: tu ID de contenedor GTM
+- textos, posición, `WPMC_DEBUG`, etc.
 
-- Sets `consent default` (denied + region + wait_for_update) **before** GTM.
-- Restores user choice from `localStorage` and sends `consent update`.
-- Banner: Accept / Reject shortcuts.
-- Preferences panel: toggles map to:
+## Funcionamiento
+
+- Establece `consent default` (denegado + región + wait_for_update) **antes** de GTM.
+- Restaura la elección del usuario desde `localStorage` y envía `consent update`.
+- Banner: atajos Aceptar / Rechazar.
+- Panel de preferencias: los toggles se mapean a:
   - Analytics → `analytics_storage`
   - Marketing → `ad_storage`, `ad_user_data`, `ad_personalization`
 
-## Dev / Debug
+## Desarrollo / Depuración
 
-- Enable `WPMC_DEBUG` to print every `consent default/update` on console.
-- Test with Local (WP Engine) **Live Links** + GTM Preview.
+- Habilitar `WPMC_DEBUG` para imprimir cada `consent default/update` en consola.
+- Probar con Local (WP Engine) **Live Links** + Vista previa de GTM.
 
-## Roadmap
+## Instrucciones para Google Tag Manager (GTM)
 
-- i18n, A11y enhancements, categories fine-grain, basic-mode option.
+Consultar [gtm_instructions.md](gtm_instructions.md).

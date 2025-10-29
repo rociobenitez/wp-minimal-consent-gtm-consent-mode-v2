@@ -4,6 +4,11 @@
  * Description: Banner minimalista de cookies con Google Consent Mode v2, gestionado por código y compatible con GTM (Advanced Mode).
  * Version: 0.1.1
  * Author: Rocío Benítez García
+ * Require at least: 5.9
+ * Requires PHP: 7.4
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: wp-minimal-consent
  */
 
 if (!defined('ABSPATH')) exit;
@@ -12,16 +17,17 @@ if (!defined('ABSPATH')) exit;
  *  CONFIGURACIÓN
  *  Edita únicamente esta sección
  *  ========================= */
-define('WPMC_GTM_ID', 'GTM-K6BJZF9R');          // ID de contenedor de Google Tag Manager
-define('WPMC_STORAGE_KEY', 'wpmc_consent');     // Clave en localStorage para guardar el estado
-define('WPMC_WAIT_FOR_UPDATE', 500);            // ms para wait_for_update (Consent Mode)
-define('WPMC_BANNER_POSITION', 'bottom');       // 'bottom' | 'top'
-define('WPMC_BANNER_SHOW_MANAGE', true);        // Mostrar botón "Gestionar"
-define('WPMC_FLOATING_ENABLED', true);          // Mostrar botón "flotante"
-define('WPMC_FLOATING_CORNER', 'bottom-left');  // 'bottom-right' | 'bottom-left'
-define('WPMC_DEBUG', true);                     // Activar logs en consola para depuración
+define('WPMC_GTM_ID', 'GTM-K6BJZF9R');              // ID de contenedor de Google Tag Manager
+define('WPMC_STORAGE_KEY', 'wpmc_consent');         // Clave en localStorage para guardar el estado
+define('WPMC_EVENT_UPDATE', 'wpmc_consent_update'); // Nombre del evento en dataLayer al actualizar consentimiento
+define('WPMC_WAIT_FOR_UPDATE', 500);                // ms para wait_for_update (Consent Mode)
+define('WPMC_BANNER_POSITION', 'bottom');           // 'bottom' | 'top'
+define('WPMC_BANNER_SHOW_MANAGE', true);            // Mostrar botón "Gestionar"
+define('WPMC_FLOATING_ENABLED', true);              // Mostrar botón "flotante"
+define('WPMC_FLOATING_CORNER', 'bottom-left');      // 'bottom-right' | 'bottom-left'
+define('WPMC_DEBUG', true);                         // Activar logs en consola para depuración
 
-// Textos del banner (mínimos y claros)
+// Textos del banner
 define('WPMC_TXT_TITLE', 'Valoramos tu privacidad');
 define('WPMC_TXT_MSG', 'Usamos cookies para mejorar su experiencia de navegación,  mostrarle anuncios o contenidos personalizados y analizar nuestro tráfico. Al hacer clic en “Aceptar todo” usted da su consentimiento a nuestro uso de las cookies.');
 define('WPMC_TXT_ACCEPT', 'Aceptar todo');
@@ -63,7 +69,6 @@ add_action('wp_enqueue_scripts', function () {
 
 /** =========================
  *  HEAD: dataLayer + Consent defaults + carga GTM
- *  Prioridad 0 para ejecutarse lo más arriba posible
  *  ========================= */
 add_action('wp_head', function () {
   $gtm = esc_js(WPMC_GTM_ID);
@@ -71,17 +76,17 @@ add_action('wp_head', function () {
   $storageKey = esc_js(WPMC_STORAGE_KEY);
   ?>
   <script>
-    // Debug flag visible en ventana
+    // Debug global
     window.WPMC_DEBUG = <?php echo WPMC_DEBUG ? 'true' : 'false'; ?>;
 
-    // dataLayer + helper gtag()
+    // dataLayer + gtag()
     window.dataLayer = window.dataLayer || [];
     function gtag(){ 
       dataLayer.push(arguments);
-      
       if (window.WPMC_DEBUG && arguments && arguments[0] === 'consent') {
         try {
-          var type = arguments[1], payload = arguments[2] || {};
+          const type = arguments[1]
+          const payload = arguments[2] || {};
           console.groupCollapsed('[WPMC] consent ' + type);
           console.table(payload);
           console.groupEnd();
@@ -89,28 +94,29 @@ add_action('wp_head', function () {
       }
     }
 
-    // Señales recomendadas por Google junto a Consent Mode v2
+    // Señales recomendadas
     gtag('set', 'ads_data_redaction', true);
     gtag('set', 'url_passthrough', true);
 
-    // Defaults de consentimiento (Advanced Consent Mode) ANTES de cargar GTM
+    // Defaults (Advanced Consent Mode) ANTES de cargar GTM
     gtag('consent', 'default', {
       ad_storage: 'denied',
       analytics_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied',
-      wait_for_update: <?php echo $waitMs; ?>
+      wait_for_update: <?php echo $waitMs; ?>,
+      // region: ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE","IS","LI","NO","GB","CH"]
     });
 
     // Restaurar la elección previa del usuario si existe
-    (function (KEY) {
+    ((KEY) => {
       try {
-        var raw = localStorage.getItem(KEY);
+        const raw = localStorage.getItem(KEY);
         if (!raw) return;
-        var c = JSON.parse(raw) || {};
-        var payload = {};
+        const c = JSON.parse(raw) || {};
+        const payload = {};
         ['ad_storage','analytics_storage','ad_user_data','ad_personalization']
-          .forEach(function(k){ if (c[k]) payload[k] = c[k]; });
+          .forEach(k => { if (c[k]) payload[k] = c[k]; });
         if (Object.keys(payload).length) gtag('consent','update', payload);
       } catch(e){}
     })('<?php echo $storageKey; ?>');
@@ -183,7 +189,7 @@ add_action('wp_footer', function () {
   <div id="wpmc-modal" class="wpmc-modal" role="dialog" aria-modal="true" aria-labelledby="wpmc-modal-title" hidden>
     <div class="wpmc-box">
       <?php if (WPMC_TXT_PANEL_TITLE): ?>
-        <h2 id="wpmc-modal-title" class="wpmc-title"><?php echo esc_html(WPMC_TXT_PANEL_TITLE); ?></h2>
+        <h2 id="wpmc-modal-title" class="wpmc-title" tabindex="-1"><?php echo esc_html(WPMC_TXT_PANEL_TITLE); ?></h2>
       <?php endif; ?>
       <p class="wpmc-desc"><?php echo esc_html(WPMC_TXT_PANEL_DESC); ?></p>
 
@@ -217,15 +223,18 @@ add_action('wp_footer', function () {
   </div>
 
   <script>
-    (function(){
-      var banner   = document.getElementById('wpmc-banner');
-      var modal    = document.getElementById('wpmc-modal');
-      var prefBtn  = document.getElementById('wpmc-preferences-btn');
-      var KEY      = '<?php echo esc_js(WPMC_STORAGE_KEY); ?>';
-      var hideIfDecided = true;
-      var lastFocus = null;
+    (() => {
+      const WPMC_STORAGE_KEY  = '<?php echo json_encode(WPMC_STORAGE_KEY); ?>';
+      const WPMC_EVENT_UPDATE = '<?php echo json_encode(WPMC_EVENT_UPDATE); ?>';
 
-      var el = {
+      const banner   = document.getElementById('wpmc-banner');
+      const modal    = document.getElementById('wpmc-modal');
+      const prefBtn  = document.getElementById('wpmc-preferences-btn');
+
+      const hideIfDecided = true;
+      let lastFocus = null;
+
+      const el = {
         accept: document.getElementById('wpmc-accept'),
         reject: document.getElementById('wpmc-reject'),
         manage: document.getElementById('wpmc-manage'),
@@ -236,56 +245,63 @@ add_action('wp_footer', function () {
       };
 
       // Estado inicial
-      var saved = localStorage.getItem(KEY);
-      var hasDecision = !!saved;
+      let saved = localStorage.getItem(WPMC_STORAGE_KEY);
+      const hasDecision = !!saved;
       banner.hidden = hideIfDecided && hasDecision;
       if (prefBtn) prefBtn.hidden = !hasDecision;
       if (window.WPMC_DEBUG) console.info('[WPMC:UI] init', {hasDecision: hasDecision});
 
-      function hydrateToggles(){
+      const hydrateToggles = () => {
         try{
-          var c = saved ? JSON.parse(saved) : null;
+          const c = saved ? JSON.parse(saved) : null;
           el.optA.checked = c ? (c.analytics_storage === 'granted') : false;
           el.optM.checked = c ? (c.ad_storage === 'granted' && c.ad_user_data === 'granted' && c.ad_personalization === 'granted') : false;
           if (window.WPMC_DEBUG) console.log('[WPMC:UI] hydrate', {analytics: el.optA.checked, marketing: el.optM.checked});
         }catch(e){
-          el.optA.checked = false; el.optM.checked = false;
+          el.optA.checked = false;
+          el.optM.checked = false;
         }
       }
 
-      function openModal(){
+      const openModal = () => {
         hydrateToggles();
         lastFocus = document.activeElement;
         modal.hidden = false;
-        document.getElementById('wpmc-modal-title').focus({preventScroll:true});
+        const title = document.getElementById('wpmc-modal-title');
+        if (title) title.focus({preventScroll:true});
         if (prefBtn) prefBtn.hidden = true;
         if (window.WPMC_DEBUG) console.log('[WPMC:UI] modal open');
       }
-      function closeModal(){
+      const closeModal = () => {
         modal.hidden = true;
         if (lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
-        var has = !!localStorage.getItem(KEY);
+        const has = !!localStorage.getItem(WPMC_STORAGE_KEY);
         if (prefBtn) prefBtn.hidden = !has;
         if (window.WPMC_DEBUG) console.log('[WPMC:UI] modal close');
       }
 
-      function applyConsent(state){
-        localStorage.setItem(KEY, JSON.stringify(state));
+      const applyConsent = (state) => {
+        localStorage.setItem(WPMC_STORAGE_KEY, JSON.stringify(state));
         if (window.WPMC_DEBUG) {
           console.groupCollapsed('[WPMC] applyConsent');
           console.table(state);
           console.groupEnd();
         }
-        gtag('consent','update', state); // Esto dispara logging por el wrapper de gtag()
+        // Señal a Google
+        gtag('consent','update', state);
+        // Señal a GTM (Custom Event)
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: WPMC_EVENT_UPDATE, consent_state: state });
+
         saved = JSON.stringify(state);
         banner.hidden = true;
         if (prefBtn) prefBtn.hidden = false;
       }
 
-      function computeState(){
-        var A = el.optA.checked; // Analítica
-        var M = el.optM.checked; // Publicidad
-        var state = {
+      const computeState = () => {
+        const A = el.optA.checked; // Analítica
+        const M = el.optM.checked; // Publicidad
+        const state = {
           analytics_storage: A ? 'granted' : 'denied',
           ad_storage:        M ? 'granted' : 'denied',
           ad_user_data:      M ? 'granted' : 'denied',
@@ -295,9 +311,9 @@ add_action('wp_footer', function () {
         return state;
       }
 
-      // Banner buttons
-      el.accept.addEventListener('click', function(){
-        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Accept all');
+      // Botones del banner
+      el.accept?.addEventListener('click', () => {
+        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Aceptar todo');
         applyConsent({
           ad_storage:'granted', analytics_storage:'granted',
           ad_user_data:'granted', ad_personalization:'granted'
@@ -305,8 +321,8 @@ add_action('wp_footer', function () {
         if (!modal.hidden) closeModal();
       });
 
-      el.reject.addEventListener('click', function(){
-        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Reject all');
+      el.reject?.addEventListener('click', () => {
+        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Rechazar todo');
         applyConsent({
           ad_storage:'denied', analytics_storage:'denied',
           ad_user_data:'denied', ad_personalization:'denied'
@@ -314,33 +330,29 @@ add_action('wp_footer', function () {
         if (!modal.hidden) closeModal();
       });
 
-      if (el.manage){
-        el.manage.addEventListener('click', function(){
-          if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Manage');
-          openModal();
-        });
-      }
+      el.manage?.addEventListener('click', () => {
+        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Ajustar preferencias');
+        openModal();
+      });
 
-      // Floating button
-      if (prefBtn){
-        prefBtn.addEventListener('click', function(){
-          if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Floating prefs');
-          openModal();
-        });
-      }
+      // Botón flotante
+      prefBtn?.addEventListener('click', () => {
+        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Botón flotante');
+        openModal();
+      });
 
-      // Modal actions
-      el.save.addEventListener('click', function(){
-        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Save');
+      // Acciones del modal
+      el.save?.addEventListener('click', () => {
+        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Guardar selección');
         applyConsent(computeState());
         closeModal();
       });
-      el.close.addEventListener('click', function(){
-        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Close');
+      el.close?.addEventListener('click', () => {
+        if (window.WPMC_DEBUG) console.log('[WPMC:UI] click Cerrar');
         closeModal();
       });
 
-      document.addEventListener('keydown', function(e){
+      document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !modal.hidden) {
           if (window.WPMC_DEBUG) console.log('[WPMC:UI] press Escape');
           closeModal();
